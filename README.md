@@ -1,5 +1,5 @@
 # ControlChallenges
 
-A set of interactive control systems exercies
+A set of interactive control systems exercises:
 
-https://janismac.github.io/ControlChallenges/
+[https://janismac.github.io/ControlChallenges/](https://mbarreau.github.io/ControlChallenges/)
