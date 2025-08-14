@@ -139,37 +139,11 @@ CC.levelGroups = {
         TutorialBlockWithoutFriction: 'Part 2',
         TutorialBlockOnSlope: 'Part 3',
     },
-    Multirotor: {
-        MultirotorIntro: 'Hover',
-        MultirotorObstacles: 'Obstacles',
-        MultirotorFlip: 'Flip',
-    },
-    Airplane: {
-        AirplaneIntro: 'Takeoff',
-        AirplaneLanding: 'Landing',
-    },
-    'Ball on Platform': {
-        BallOnPlatformBalance: 'Balance',
-        BallOnPlatformBounce: 'Bounce',
-        BallOnPlatformEdgeBalance: 'Edge Balance',
-    },
     'Inverted Pendulum': {
+        StabilizePendulum: 'Stabilize',
+    },
+    'Inverted Pendulum on Cart': {
         StabilizeSinglePendulum: 'Stabilize',
-        SwingUpSinglePendulum: 'Swing Up',
-    },
-    'Inverted Double Pendulum': {
-        StabilizeDoublePendulum: 'Stabilize',
-        SwingUpDoublePendulum: 'Swing Up',
-    },
-    'Rocket Landing': {
-        RocketLandingNormal: 'Intro',
-        RocketLandingUpsideDown: 'Upside Down',
-        RocketLandingMulti: 'Multiple',
-        RocketLandingHoverslam: 'Hoverslam',
-    },
-    Driving: {
-        VehicleSteeringSimple: 'Intro',
-        VehicleRacing: 'Racing',
     },
 };
 
@@ -274,3 +248,7 @@ try { CC.loadLevel(localStorage.getItem("lastLevel")); }
 catch (e) { CC.logError(e); }
 CC.loadCodeAndReset();
 CC.gameLoop();
+
+$('#measurementNoiseSelect, #processNoiseSelect, #initialXSelect, #initialDXSelect, #initialThetaSelect, #initialDThetaSelect').on('change', function () {
+    if (CC.loadCodeAndReset()) CC.play();
+});

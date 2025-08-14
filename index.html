@@ -71,6 +71,87 @@
 			<p>If you need persistent state, you can use global variables. You will have to declare them outside your function with the 'var' keyword.</p>
 			<p>Your code for each level is saved in your browser.</p>
 		</div>
+
+		<div id="settingsBox" style="
+			position: fixed;
+			bottom: 3px;
+			right: 20px;
+			background: rgba(255, 255, 255, 0.95);
+			border: 1px solid #ccc;
+			border-radius: 6px;
+			padding: 10px 15px;
+			box-shadow: 0 0 10px rgba(0,0,0,0.2);
+			z-index: 1000;
+		">
+			<h4 style="margin-top: 0; font-size: 16px;">Simulation Settings</h4>
+
+			<div style="display: flex; align-items: center; margin-bottom: 6px;">
+				<label style="width: 140px;">Measurement Noise:</label>
+				<select id="measurementNoiseSelect" class="form-control" style="width: 130px;">
+					<option value="0">No</option>
+					<option value="0.0001">Low</option>
+					<option value="0.001">High</option>
+				</select>
+			</div>
+
+			<div style="display: flex; align-items: center;">
+				<label style="width: 140px;">Process Noise:</label>
+				<select id="processNoiseSelect" class="form-control" style="width: 130px;">
+					<option value="0">No</option>
+					<option value="0.01">Low</option>
+					<option value="0.1">High</option>
+				</select>
+			</div>
+
+			<!-- Initial Theta -->
+			<div style="display: flex; align-items: center; margin-bottom: 6px;">
+				<label style="width: 140px;">Initial θ (rad):</label>
+				<select id="initialThetaSelect" class="form-control" style="width: 130px;">
+					<option value="0.001">0.001</option>
+					<option value="0.05">0.05</option>
+					<option value="0.2">0.2</option>
+					<option value="0.5">0.5</option>
+					<option value="1.0">1.0</option>
+				</select>
+			</div>
+
+			<!-- Initial dTheta -->
+			<div style="display: flex; align-items: center; margin-bottom: 6px;">
+				<label style="width: 140px;">Initial dθ (rad/s):</label>
+				<select id="initialDThetaSelect" class="form-control" style="width: 130px;">
+					<option value="-0.3">-0.3</option>
+					<option value="-0.1">-0.1</option>
+					<option value="0.01">0.01</option>
+					<option value="0.1">0.1</option>
+					<option value="0.3">0.3</option>
+				</select>
+			</div>
+
+			<!-- Initial X -->
+			<div style="display: flex; align-items: center; margin-bottom: 6px;">
+				<label style="width: 140px;">Initial x (m):</label>
+				<select id="initialXSelect" class="form-control" style="width: 130px;">
+					<option value="-2.5">-2.5</option>
+					<option value="-1.0">-1.0</option>
+					<option value="-0.1">-0.1</option>
+					<option value="1.0">1.0</option>
+					<option value="2.5">2.5</option>
+				</select>
+			</div>
+
+			<!-- Initial dX -->
+			<div style="display: flex; align-items: center;">
+				<label style="width: 140px;">Initial dx (m/s):</label>
+				<select id="initialDXSelect" class="form-control" style="width: 130px;">
+					<option value="-1.0">-1.0</option>
+					<option value="-0.5">-0.5</option>
+					<option value="0.0">0.0</option>
+					<option value="0.5">0.5</option>
+					<option value="1.0">1.0</option>
+					
+				</select>
+			</div>
+		</div>
 		
 		<script src="js/jquery-1.11.2.js"></script>
 		<script src="js/numeric-1.2.6.js"></script>
@@ -83,6 +164,7 @@
 
 		<script id="userscript"></script>
 		<script src="js/models/RocketLanding.js"></script>
+		<script src="js/models/Pendulum.js"></script>
 		<script src="js/models/SinglePendulum.js"></script>
 		<script src="js/models/DoublePendulum.js"></script>
 		<script src="js/models/BlockOnSlope.js"></script>
@@ -96,6 +178,7 @@
 		<script src="js/levels/RocketLandingUpsideDown.js"></script>
 		<script src="js/levels/RocketLandingMulti.js"></script>
 		<script src="js/levels/RocketLandingHoverslam.js"></script>
+		<script src="js/levels/StabilizePendulum.js"></script>
 		<script src="js/levels/StabilizeSinglePendulum.js"></script>
 		<script src="js/levels/SwingUpSinglePendulum.js"></script>
 		<script src="js/levels/StabilizeDoublePendulum.js"></script>

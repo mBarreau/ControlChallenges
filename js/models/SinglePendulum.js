@@ -1,6 +1,15 @@
 'use strict';
 if (typeof Models === 'undefined') var Models = {};
 
+// Gaussian noise generator
+function gaussianNoise(mean, variance) {
+    const std = Math.sqrt(variance);
+    let u = 0, v = 0;
+    while(u === 0) u = Math.random();
+    while(v === 0) v = Math.random();
+    return mean + std * Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+}
+
 Models.SinglePendulum = function(params)
 {
     var nVars = Object.keys(this.vars).length;
@@ -23,12 +32,24 @@ Models.SinglePendulum.prototype.vars =
     dx: 0,
     F: 0,
     F_cmd: 0,
-    T: 0
+    T: 0,
+    processNoiseVariance: 0,
+    measurementNoiseVariance: 0
 };
 
 Models.SinglePendulum.prototype.simulate = function (dt, controlFunc)
 {
-    this.F_cmd = controlFunc({x:this.x,dx:this.dx,theta:this.theta,dtheta:this.dtheta,T:this.T});
+    const state = {x: this.x,dx: this.dx,theta: this.theta,dtheta: this.dtheta,T: this.T};
+
+    if (this.measurementNoiseVariance > 0) {
+        state.x += gaussianNoise(0, this.measurementNoiseVariance);
+        state.dx += gaussianNoise(0, this.measurementNoiseVariance);
+        state.theta += gaussianNoise(0, this.measurementNoiseVariance);
+        state.dtheta += gaussianNoise(0, this.measurementNoiseVariance);
+    }
+    
+    this.F_cmd = controlFunc(state);
+
     if(typeof this.F_cmd != 'number' || isNaN(this.F_cmd)) throw "Error: The controlFunction must return a number.";
     this.F_cmd = Math.max(-30,Math.min(30,this.F_cmd));
     integrationStep(this, ['x', 'dx', 'theta', 'dtheta', 'F'], dt);
@@ -40,13 +61,25 @@ Models.SinglePendulum.prototype.ode = function (x)
     var c = Math.cos(x[2]);
     var dthetasq = x[3] * x[3];
     
-    var M = [[this.m0,0,0,0,-s],
-        [0,0,this.m1,0,s],
-        [0,0,0,this.m1,c],
-        [1,this.L*c,-1,0,0],
-        [0,-this.L*s,0,-1,0]];
-    var b = [x[4],0,-this.m1*this.g,s*dthetasq*this.L,c*dthetasq*this.L];
+    var M = [[this.m0,   0,          0,        0,        -s],
+             [0,         0,          this.m1,  0,        s ],
+             [0,         0,          0,        this.m1,  c ],
+             [1,         this.L*c,   -1,       0,        0 ],
+             [0,         -this.L*s,  0,        -1,       0 ]];
+
+    var b = [x[4],
+             0,
+             -this.m1*this.g,
+             s*dthetasq*this.L,
+             c*dthetasq*this.L];
+
     var ddx = numeric.solve(M,b)
+
+    if (this.processNoiseVariance > 0) {
+        ddx[0] += gaussianNoise(0, this.processNoiseVariance);  
+        ddx[1] += gaussianNoise(0, this.processNoiseVariance); 
+    }
+
     return [x[1],ddx[0],x[3],ddx[1],40.0*(this.F_cmd - x[4])];
 }
 

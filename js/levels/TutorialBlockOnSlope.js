@@ -10,7 +10,27 @@ Levels.TutorialBlockOnSlope = function()
     this.boilerPlateCode = "function controlFunction(block)\n{\n  return 0;\n}";
     this.difficultyRating = 1;
     this.description = "Push the block under the arrow (x=0) and make it stop there. Calculate the horizontal force on the block necessary to achieve this. This time the block is on a slope. The PD controller alone will not work.";
-    this.model = new Models.BlockOnSlope({g: 5,x: -2,dx: 0,slope: -0.4,friction: 0});
+    this.model = new Models.BlockOnSlope({
+        g: 5,
+        x: parseFloat(document.getElementById("initialXSelect").value),
+        dx: parseFloat(document.getElementById("initialDXSelect").value),
+        slope: -0.4,
+        friction: 0});
+
+    // Function to update which inputs are shown
+    const updateInitialConditionInputs = () => {
+        document.getElementById("initialThetaSelect").parentElement.style.display = "none";
+        document.getElementById("initialDThetaSelect").parentElement.style.display = "none";
+        document.getElementById("initialXSelect").parentElement.style.display = "flex";
+        document.getElementById("initialDXSelect").parentElement.style.display = "flex";
+    };
+
+    // Run immediately if DOM is ready, or wait until it is
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        updateInitialConditionInputs();
+    } else {
+        window.addEventListener('DOMContentLoaded', updateInitialConditionInputs);
+    }
 }
 
 

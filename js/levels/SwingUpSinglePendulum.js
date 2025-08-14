@@ -10,7 +10,32 @@ Levels.SwingUpSinglePendulum = function()
     this.boilerPlateCode = "function controlFunction(pendulum)\n{\n  return 10*Math.sin(8*pendulum.T);\n}";
     this.difficultyRating = 3;
     this.description = "Bring the pendulum into an upright position and keep it upright in the center (x=0).";
-    this.model = new Models.SinglePendulum({m0: 10,m1: .5,L: 1,g: 9.81,theta: 3.1415,dtheta: 0,x: 0,dx: 0,F: 0,T: 0});
+    this.model = new Models.SinglePendulum({
+        m0: 10,
+        m1: .5,
+        L: 1,
+        g: 9.81,
+        theta: 3.1415,
+        dtheta: 0,
+        x: 0,
+        dx: 0,
+        F: 0,
+        T: 0});
+
+    // Function to update which inputs are shown
+    const updateInitialConditionInputs = () => {
+        document.getElementById("initialThetaSelect").parentElement.style.display = "none";
+        document.getElementById("initialDThetaSelect").parentElement.style.display = "none";
+        document.getElementById("initialXSelect").parentElement.style.display = "none";
+        document.getElementById("initialDXSelect").parentElement.style.display = "none";
+    };
+
+    // Run immediately if DOM is ready, or wait until it is
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        updateInitialConditionInputs();
+    } else {
+        window.addEventListener('DOMContentLoaded', updateInitialConditionInputs);
+    }
 }
 
 
