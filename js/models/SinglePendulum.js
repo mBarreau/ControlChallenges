@@ -34,12 +34,13 @@ Models.SinglePendulum.prototype.vars =
     F_cmd: 0,
     T: 0,
     processNoiseVariance: 0,
-    measurementNoiseVariance: 0
+    measurementNoiseVariance: 0,
+    lambda:0
 };
 
 Models.SinglePendulum.prototype.simulate = function (dt, controlFunc)
 {
-    const state = {x: this.x,dx: this.dx,theta: this.theta,dtheta: this.dtheta,T: this.T};
+    const state = {x: this.x ,theta: this.theta, dx: this.dx, dtheta: this.dtheta,T: this.T};
 
     if (this.measurementNoiseVariance > 0) {
         state.x += gaussianNoise(0, this.measurementNoiseVariance);
@@ -52,35 +53,28 @@ Models.SinglePendulum.prototype.simulate = function (dt, controlFunc)
 
     if(typeof this.F_cmd != 'number' || isNaN(this.F_cmd)) throw "Error: The controlFunction must return a number.";
     this.F_cmd = Math.max(-30,Math.min(30,this.F_cmd));
-    integrationStep(this, ['x', 'dx', 'theta', 'dtheta', 'F'], dt);
+    integrationStep(this, ['x', 'theta', 'dx', 'dtheta'], dt);
 }
 
-Models.SinglePendulum.prototype.ode = function (x)
+Models.SinglePendulum.prototype.ode = function (z)
 {
-    var s = Math.sin(x[2]);
-    var c = Math.cos(x[2]);
-    var dthetasq = x[3] * x[3];
+    var s = Math.sin(z[1]);
+    var c = Math.cos(z[1]);
+    var dthetasq = z[3] * z[3];
     
-    var M = [[this.m0,   0,          0,        0,        -s],
-             [0,         0,          this.m1,  0,        s ],
-             [0,         0,          0,        this.m1,  c ],
-             [1,         this.L*c,   -1,       0,        0 ],
-             [0,         -this.L*s,  0,        -1,       0 ]];
+    var dx = z[2];
+    var dtheta = z[3];
 
-    var b = [x[4],
-             0,
-             -this.m1*this.g,
-             s*dthetasq*this.L,
-             c*dthetasq*this.L];
-
-    var ddx = numeric.solve(M,b)
+    var detD = this.L**2*this.m1*(this.m0 + this.m1*s**2);
+    var ddx = this.m1*this.L**2*( this.m1*this.L*dthetasq*s - this.m1*this.g*c*s + this.F_cmd) / detD - this.lambda*c*z[2]*this.m1*this.L / detD;
+    var ddtheta = this.m1*this.L*(-this.m1*this.L*dthetasq*c*s + (this.m0+this.m1)*this.g*s - this.F_cmd *c) / detD - this.lambda*(this.m0+this.m1) * z[2];
 
     if (this.processNoiseVariance > 0) {
-        ddx[0] += gaussianNoise(0, this.processNoiseVariance);  
-        ddx[1] += gaussianNoise(0, this.processNoiseVariance); 
+        ddtheta += gaussianNoise(0, this.processNoiseVariance);  
+        ddx += gaussianNoise(0, this.processNoiseVariance); 
     }
 
-    return [x[1],ddx[0],x[3],ddx[1],40.0*(this.F_cmd - x[4])];
+    return [dx, dtheta, ddx, ddtheta];
 }
 
 
@@ -91,7 +85,7 @@ Models.SinglePendulum.prototype.draw = function (ctx, canvas)
     var cartWidth = 0.4*this.L;
     var cartHeight = 0.7*cartWidth;
     
-    var tipX = this.x+this.L*Math.sin(this.theta);
+    var tipX = this.x + this.L*Math.sin(this.theta);
     var tipY = this.L*Math.cos(this.theta)+cartHeight;
     
     // ground
@@ -116,7 +110,7 @@ Models.SinglePendulum.prototype.draw = function (ctx, canvas)
     // force arrow
     ctx.strokeStyle="#FF0000";
     ctx.lineCap = 'round';
-    drawArrow(ctx, this.x, 0.5*cartHeight, 0.1*this.F, 0, 0.05, this.L/40.0);
+    drawArrow(ctx, this.x, 0.5*cartHeight, 0.1*this.F_cmd, 0, 0.05, this.L/40.0);
 }
 
 Models.SinglePendulum.prototype.infoText = function ()

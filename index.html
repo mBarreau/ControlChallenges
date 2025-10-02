@@ -82,76 +82,99 @@
 			padding: 10px 15px;
 			box-shadow: 0 0 10px rgba(0,0,0,0.2);
 			z-index: 1000;
+			max-width: 500px;
 		">
-			<h4 style="margin-top: 0; font-size: 16px;">Simulation Settings</h4>
-
-			<div style="display: flex; align-items: center; margin-bottom: 6px;">
-				<label style="width: 140px;">Measurement Noise:</label>
-				<select id="measurementNoiseSelect" class="form-control" style="width: 130px;">
-					<option value="0">No</option>
-					<option value="0.0001">Low</option>
-					<option value="0.001">High</option>
-				</select>
+			<!-- Header row with title + damping select -->
+			<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+				<h4 style="margin: 0; font-size: 16px;">Simulation Settings</h4>
+				<div style="display: flex; align-items: center; gap: 6px;">
+					<label for="dampingSelect" style="font-size: 14px;">Damping:</label>
+					<select id="dampingSelect" class="form-control" style="width: 100px;">
+						<option value="0" selected="selected">None</option>
+						<option value="0.5">Low</option>
+						<option value="2">High</option>
+					</select>
+				</div>
 			</div>
 
-			<div style="display: flex; align-items: center;">
-				<label style="width: 140px;">Process Noise:</label>
-				<select id="processNoiseSelect" class="form-control" style="width: 130px;">
-					<option value="0">No</option>
-					<option value="0.01">Low</option>
-					<option value="0.1">High</option>
-				</select>
-			</div>
+			<!-- Two-column settings -->
+			<div style="
+				display: grid;
+				grid-template-columns: 1fr 1fr; 
+				gap: 10px 15px;
+			">
+				<!-- Measurement Noise -->
+				<div style="display: flex; align-items: center;">
+					<label style="width: 120px;">Measurement Noise:</label>
+					<select id="measurementNoiseSelect" class="form-control" style="width: 100px;">
+						<option value="0" selected="selected">No</option>
+						<option value="0.01">Low</option>
+						<option value="0.1">High</option>
+					</select>
+				</div>
 
-			<!-- Initial Theta -->
-			<div style="display: flex; align-items: center; margin-bottom: 6px;">
-				<label style="width: 140px;">Initial θ (rad):</label>
-				<select id="initialThetaSelect" class="form-control" style="width: 130px;">
-					<option value="0.001">0.001</option>
-					<option value="0.05">0.05</option>
-					<option value="0.2">0.2</option>
-					<option value="0.5">0.5</option>
-					<option value="1.0">1.0</option>
-				</select>
-			</div>
+				<!-- Process Noise -->
+				<div style="display: flex; align-items: center;">
+					<label style="width: 120px;">Process Noise:</label>
+					<select id="processNoiseSelect" class="form-control" style="width: 100px;">
+						<option value="0" selected="selected">No</option>
+						<option value="0.01">Low</option>
+						<option value="0.1">High</option>
+					</select>
+				</div>
 
-			<!-- Initial dTheta -->
-			<div style="display: flex; align-items: center; margin-bottom: 6px;">
-				<label style="width: 140px;">Initial dθ (rad/s):</label>
-				<select id="initialDThetaSelect" class="form-control" style="width: 130px;">
-					<option value="-0.3">-0.3</option>
-					<option value="-0.1">-0.1</option>
-					<option value="0.01">0.01</option>
-					<option value="0.1">0.1</option>
-					<option value="0.3">0.3</option>
-				</select>
-			</div>
+				<!-- Initial Theta -->
+				<div style="display: flex; align-items: center;">
+					<label style="width: 120px;">Initial θ (rad):</label>
+					<select id="initialThetaSelect" class="form-control" style="width: 100px;">
+						<option value="0.01" selected="selected">0.01</option>
+						<option value="0.05">0.05</option>
+						<option value="0.2">0.2</option>
+						<option value="0.5">0.5</option>
+						<option value="1.0">1.0</option>
+					</select>
+				</div>
 
-			<!-- Initial X -->
-			<div style="display: flex; align-items: center; margin-bottom: 6px;">
-				<label style="width: 140px;">Initial x (m):</label>
-				<select id="initialXSelect" class="form-control" style="width: 130px;">
-					<option value="-2.5">-2.5</option>
-					<option value="-1.0">-1.0</option>
-					<option value="-0.1">-0.1</option>
-					<option value="1.0">1.0</option>
-					<option value="2.5">2.5</option>
-				</select>
-			</div>
+				<!-- Initial dTheta -->
+				<div style="display: flex; align-items: center;">
+					<label style="width: 120px;">Initial dθ (rad/s):</label>
+					<select id="initialDThetaSelect" class="form-control" style="width: 100px;">
+						<option value="-0.3">-0.3</option>
+						<option value="-0.1">-0.1</option>
+						<option value="0.01" selected="selected">0.01</option>
+						<option value="0.1">0.1</option>
+						<option value="0.3">0.3</option>
+					</select>
+				</div>
 
-			<!-- Initial dX -->
-			<div style="display: flex; align-items: center;">
-				<label style="width: 140px;">Initial dx (m/s):</label>
-				<select id="initialDXSelect" class="form-control" style="width: 130px;">
-					<option value="-1.0">-1.0</option>
-					<option value="-0.5">-0.5</option>
-					<option value="0.0">0.0</option>
-					<option value="0.5">0.5</option>
-					<option value="1.0">1.0</option>
-					
-				</select>
+				<!-- Initial X -->
+				<div style="display: flex; align-items: center;">
+					<label style="width: 120px;">Initial x (m):</label>
+					<select id="initialXSelect" class="form-control" style="width: 100px;">
+						<option value="-2.5">-2.5</option>
+						<option value="-1.0">-1.0</option>
+						<option value="-0.01" selected="selected">-0.1</option>
+						<option value="1.0">1.0</option>
+						<option value="2.5">2.5</option>
+					</select>
+				</div>
+
+				<!-- Initial dX -->
+				<div style="display: flex; align-items: center;">
+					<label style="width: 120px;">Initial dx (m/s):</label>
+					<select id="initialDXSelect" class="form-control" style="width: 100px;">
+						<option value="-1.0">-1.0</option>
+						<option value="-0.5">-0.5</option>
+						<option value="0.0" selected="selected">0.0</option>
+						<option value="0.5">0.5</option>
+						<option value="1.0">1.0</option>
+					</select>
+				</div>
 			</div>
 		</div>
+    </div>
+</div>
+
 		
 		<script src="js/jquery-1.11.2.js"></script>
 		<script src="js/numeric-1.2.6.js"></script>

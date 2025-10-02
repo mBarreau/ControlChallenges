@@ -249,6 +249,9 @@ catch (e) { CC.logError(e); }
 CC.loadCodeAndReset();
 CC.gameLoop();
 
-$('#measurementNoiseSelect, #processNoiseSelect, #initialXSelect, #initialDXSelect, #initialThetaSelect, #initialDThetaSelect').on('change', function () {
-    if (CC.loadCodeAndReset()) CC.play();
+$('#measurementNoiseSelect, #processNoiseSelect, #initialXSelect, #initialDXSelect, #initialThetaSelect, #initialDThetaSelect, #dampingSelect').on('change', function () {
+    if (CC.loadCodeAndReset()){
+        CC.play();
+        CC.pause();
+    } 
 });

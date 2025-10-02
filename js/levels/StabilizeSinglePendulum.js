@@ -21,7 +21,8 @@ Levels.StabilizeSinglePendulum = function()
         F: 0,
         T: 0,
         processNoiseVariance: parseFloat(document.getElementById("processNoiseSelect").value),
-        measurementNoiseVariance: parseFloat(document.getElementById("measurementNoiseSelect").value)
+        measurementNoiseVariance: parseFloat(document.getElementById("measurementNoiseSelect").value),
+        lambda: parseFloat(document.getElementById("dampingSelect").value)
     });
 
     // Function to update which inputs are shown

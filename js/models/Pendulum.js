@@ -31,12 +31,13 @@ Models.Pendulum.prototype.vars =
     M_cmd: 0,
     T: 0,
     processNoiseVariance: 0,
-    measurementNoiseVariance: 0
+    measurementNoiseVariance: 0,
+    lambda: 0,
 };
 
 Models.Pendulum.prototype.simulate = function (dt, controlFunc)
 {
-    const state = {theta: this.theta,dtheta: this.dtheta,T: this.T};
+    const state = {theta: this.theta, dtheta: this.dtheta, T: this.T};
 
     if (this.measurementNoiseVariance > 0) {
         state.theta += gaussianNoise(0, this.measurementNoiseVariance);
@@ -53,16 +54,14 @@ Models.Pendulum.prototype.simulate = function (dt, controlFunc)
 Models.Pendulum.prototype.ode = function (x)
 {
     var s = Math.sin(x[0]);
-    
-    var A = [[this.m1 * this.L * this.L]];
-    var b = [x[2] + this.m1 * this.g * this.L * s];
-    var ddx = numeric.solve(A,b)
+    var dx = x[1];
+    var ddx = this.M_cmd /(this.m1*this.L**2) + this.g *s / this.L - (this.lambda / (this.m1 * this.L**2))* x[1];
 
     if (this.processNoiseVariance > 0) {
-        ddx[0] += gaussianNoise(0, this.processNoiseVariance);  
+        ddx += gaussianNoise(0, this.processNoiseVariance);  
     }
 
-    return [x[1],ddx[0],40.0*(this.M_cmd - x[2])];
+    return [dx, ddx];
 }
 
 
@@ -89,7 +88,7 @@ Models.Pendulum.prototype.draw = function (ctx, canvas)
     // torque arrow
     ctx.strokeStyle="#FF0000";
     ctx.lineCap = 'round';
-    drawArrow(ctx, 0, 0.1, 0.15*this.M, 0, 0.05, this.L / 40.0);
+    drawArrow(ctx, 0, 0.1, 0.15*this.M_cmd, 0, 0.05, this.L / 40.0);
 }
 
 Models.Pendulum.prototype.infoText = function ()
