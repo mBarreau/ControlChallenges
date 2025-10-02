@@ -70,8 +70,10 @@ Models.SinglePendulum.prototype.ode = function (z)
     var ddtheta = this.m1*this.L*(-this.m1*this.L*dthetasq*c*s + (this.m0+this.m1)*this.g*s - this.F_cmd *c) / detD - this.lambda*(this.m0+this.m1) * z[2];
 
     if (this.processNoiseVariance > 0) {
-        ddtheta += gaussianNoise(0, this.processNoiseVariance);  
+        dx += gaussianNoise(0, this.processNoiseVariance);
+        dtheta += gaussianNoise(0, this.processNoiseVariance);
         ddx += gaussianNoise(0, this.processNoiseVariance); 
+        ddtheta += gaussianNoise(0, this.processNoiseVariance);  
     }
 
     return [dx, dtheta, ddx, ddtheta];
